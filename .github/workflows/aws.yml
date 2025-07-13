@@ -39,16 +39,13 @@ jobs:
       - name: Update ECS task definition
         id: update-task-def
         run: |
-          IMAGE="${{ secrets.DOCKER_USERNAME }}/medusa-store:latest"
-
           TASK_DEF=$(aws ecs describe-task-definition \
             --task-definition medusa-task \
             --region us-east-1)
 
           NEW_TASK_DEF=$(echo "$TASK_DEF" | jq \
-            --arg IMAGE "$IMAGE" \
             '.taskDefinition |
-            .containerDefinitions[0].image = $IMAGE |
+            .containerDefinitions[0].image = "${{ secrets.DOCKER_USERNAME }}/medusa-store:latest" |
             del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)')
 
           NEW_TASK_DEF_ARN=$(aws ecs register-task-definition \
@@ -56,14 +53,14 @@ jobs:
             --cli-input-json "$NEW_TASK_DEF" \
             | jq -r '.taskDefinition.taskDefinitionArn')
 
-          echo "task_definition_arn=$NEW_TASK_DEF_ARN" >> $GITHUB_OUTPUT
+          echo "task_definition_arn=$NEW_TASK_DEF_ARN" >> $GITHUB_ENV
 
       - name: Update ECS service
         run: |
           aws ecs update-service \
             --cluster medusa-cluster \
             --service medusa-service \
-            --task-definition ${{ steps.update-task-def.outputs.task_definition_arn }} \
+            --task-definition ${{ env.task_definition_arn }} \
             --force-new-deployment \
             --region us-east-1
 
