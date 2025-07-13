@@ -22,32 +22,32 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ suneel717 }}
-          password: ${{ SUNEEL@717 }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       # Step 4: Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t SUNEEL@717/medusa-store:latest .
+          docker build -t secrets.DOCKER_USERNAME/medusa-store:latest .
 
       # Step 5: Push Docker image to Docker Hub
       - name: Push Docker image to Docker Hub
         run: |
-          docker push Suneel@717/medusa-store:latest
+          docker push DOCKER_USERNAME/medusa-store:latest
 
       # Step 6: Configure AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ AKIAYAUUJ3YPKGTVAQG6 }}
-          aws-secret-access-key: ${{ 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 }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
       # Step 7: Pull Docker image (for ECS)
       - name: Pull Docker image from Docker Hub
         run: |
-          docker pull suneel717/medusa-store:latest
-          echo "Pulled image: suneel717/medusa-store:latest"
+          docker pull DOCKER_USERNAME/medusa-store:latest
+          echo "Pulled image: DOCKER_USERNAME/medusa-store:latest"
 
       # Step 8: Update ECS task definition
       - name: Update ECS task definition
@@ -59,7 +59,7 @@ jobs:
 
           NEW_TASK_DEF=$(echo "$TASK_DEF" | jq \
             '.taskDefinition |
-            .containerDefinitions[0].image = "suneel717/medusa-store:latest" |
+            .containerDefinitions[0].image = "DOCKER_USERNAME/medusa-store:latest" |
             del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)')
 
           NEW_TASK_DEF_ARN=$(aws ecs register-task-definition \
