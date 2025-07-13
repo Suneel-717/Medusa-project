@@ -39,13 +39,16 @@ jobs:
       - name: Update ECS task definition
         id: update-task-def
         run: |
+          IMAGE="${{ secrets.DOCKER_USERNAME }}/medusa-store:latest"
+
           TASK_DEF=$(aws ecs describe-task-definition \
             --task-definition medusa-task \
             --region us-east-1)
 
           NEW_TASK_DEF=$(echo "$TASK_DEF" | jq \
+            --arg IMAGE "$IMAGE" \
             '.taskDefinition |
-            .containerDefinitions[0].image = "${{ secrets.DOCKER_USERNAME }}/medusa-store:latest" |
+            .containerDefinitions[0].image = $IMAGE |
             del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)')
 
           NEW_TASK_DEF_ARN=$(aws ecs register-task-definition \
