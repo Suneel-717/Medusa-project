@@ -47,3 +47,4 @@ resource "aws_ecs_service" "medusa_service" {
 
   depends_on = [aws_lb_listener.medusa_listener]
 }
+
