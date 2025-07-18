@@ -11,16 +11,14 @@ resource "aws_lb_target_group" "medusa_tg" {
   port        = 9000
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
-
-  target_type = "ip"  # <-- Fargate requires this!
+  target_type = "ip"  # Fargate needs "ip"
 
   health_check {
-    path                = "/health"
+    path                = "/"
     interval            = 30
     timeout             = 5
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    matcher             = "200"
   }
 }
 

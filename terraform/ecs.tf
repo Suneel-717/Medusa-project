@@ -11,23 +11,19 @@ resource "aws_ecs_task_definition" "medusa_task" {
 
   execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
 
-  container_definitions = jsonencode([
-    {
-      name      = "medusa"
-      image     = "551140580894.dkr.ecr.us-east-1.amazonaws.com/my-repo:my-tag"
-      portMappings = [{
-        containerPort = 9000
-        hostPort      = 9000
-        protocol      = "tcp"
-      }]
-      environment = [
-        {
-          name  = "NODE_ENV"
-          value = "production"
-        }
-      ]
-    }
-  ])
+  container_definitions = jsonencode([{
+    name  = "medusa"
+    image = "551140580894.dkr.ecr.us-east-1.amazonaws.com/my-repo:my-tag"
+    portMappings = [{
+      containerPort = 9000
+      hostPort      = 9000
+      protocol      = "tcp"
+    }]
+    environment = [{
+      name  = "NODE_ENV"
+      value = "production"
+    }]
+  }])
 }
 
 resource "aws_ecs_service" "medusa_service" {
