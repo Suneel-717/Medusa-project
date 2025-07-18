@@ -16,19 +16,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and Push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/medusa-store:latest
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -36,10 +23,19 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and Push Docker image to ECR
+        run: |
+          IMAGE_URI=551140580894.dkr.ecr.us-east-1.amazonaws.com/my-repo:latest
+          docker build -t $IMAGE_URI .
+          docker push $IMAGE_URI
+
       - name: Update ECS task definition
         id: update-task-def
         run: |
-          IMAGE="${{ secrets.DOCKER_USERNAME }}/medusa-store:latest"
+          IMAGE="551140580894.dkr.ecr.us-east-1.amazonaws.com/my-repo:latest"
 
           TASK_DEF=$(aws ecs describe-task-definition \
             --task-definition medusa-task \
@@ -61,7 +57,7 @@ jobs:
       - name: Update ECS service
         run: |
           aws ecs update-service \
-            --cluster medusa-cluster \
+            --cluster medusa-ecs-cluster \
             --service medusa-service \
             --task-definition ${{ steps.update-task-def.outputs.task_definition_arn }} \
             --force-new-deployment \
@@ -70,6 +66,6 @@ jobs:
       - name: Wait for ECS service to stabilize
         run: |
           aws ecs wait services-stable \
-            --cluster medusa-cluster \
+            --cluster medusa-ecs-cluster \
             --services medusa-service \
             --region us-east-1
