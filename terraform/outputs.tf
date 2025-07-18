@@ -7,5 +7,5 @@ output "alb_dns_name" {
 }
 
 output "ecr_repo_url" {
-  value = aws_ecr_repository.medusa_repo.repository_url
+  value = aws_ecr_repository.my-repo.repository_url
 }
