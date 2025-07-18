@@ -14,10 +14,11 @@ resource "aws_ecs_task_definition" "medusa_task" {
   container_definitions = jsonencode([
     {
       name      = "medusa"
-      image     = "551140580894.dkr.ecr.us-east-1.amazonaws.com/my-repo:my-tag" # Replace with your actual ECR image
+      image     = "551140580894.dkr.ecr.us-east-1.amazonaws.com/my-repo:my-tag"
       portMappings = [{
         containerPort = 9000
         hostPort      = 9000
+        protocol      = "tcp"
       }]
       environment = [
         {
@@ -37,7 +38,7 @@ resource "aws_ecs_service" "medusa_service" {
   desired_count   = 1
 
   network_configuration {
-    subnets         = aws_subnet.public[*].id
+    subnets          = aws_subnet.public[*].id
     assign_public_ip = true
     security_groups  = [aws_security_group.ecs_sg.id]
   }
@@ -47,4 +48,6 @@ resource "aws_ecs_service" "medusa_service" {
     container_name   = "medusa"
     container_port   = 9000
   }
+
+  depends_on = [aws_lb_listener.medusa_listener]
 }
