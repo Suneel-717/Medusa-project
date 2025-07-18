@@ -14,7 +14,7 @@ resource "aws_ecs_task_definition" "medusa_task" {
   container_definitions = jsonencode([
     {
       name      = "medusa"
-      image     = "<your_ecr_image_url>" # Replace with your actual ECR image
+      image     = "551140580894.dkr.ecr.us-east-1.amazonaws.com/my-repo:my-tag" # Replace with your actual ECR image
       portMappings = [{
         containerPort = 9000
         hostPort      = 9000
