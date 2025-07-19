@@ -1,7 +1,7 @@
 {
   "version": 4,
   "terraform_version": "1.12.2",
-  "serial": 112,
+  "serial": 109,
   "lineage": "5f64f1e8-fe76-55e3-1311-a2387434bbe5",
   "outputs": {
     "alb_dns_name": {
@@ -56,6 +56,40 @@
           },
           "sensitive_attributes": [],
           "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_db_subnet_group",
+      "name": "medusa_subnet",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:rds:us-east-1:551140580894:subgrp:medusa-db-subnet",
+            "description": "Managed by Terraform",
+            "id": "medusa-db-subnet",
+            "name": "medusa-db-subnet",
+            "name_prefix": "",
+            "subnet_ids": [
+              "subnet-0d142c5f3e6e458ff",
+              "subnet-0d33dba4de36a54bf"
+            ],
+            "supported_network_types": [],
+            "tags": {},
+            "tags_all": {},
+            "vpc_id": "vpc-0686074071ec73640"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_subnet.public",
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
         }
       ]
     },
@@ -122,7 +156,7 @@
                 "value": "disabled"
               }
             ],
-            "tags": {},
+            "tags": null,
             "tags_all": {}
           },
           "sensitive_attributes": [],
@@ -194,7 +228,7 @@
             "scheduling_strategy": "REPLICA",
             "service_connect_configuration": [],
             "service_registries": [],
-            "tags": {},
+            "tags": null,
             "tags_all": {},
             "task_definition": "arn:aws:ecs:us-east-1:551140580894:task-definition/medusa-task:20",
             "timeouts": null,
@@ -253,7 +287,7 @@
             "revision": 20,
             "runtime_platform": [],
             "skip_destroy": false,
-            "tags": {},
+            "tags": null,
             "tags_all": {},
             "task_role_arn": "",
             "track_latest": false,
@@ -284,15 +318,13 @@
             "force_detach_policies": false,
             "id": "ecsTaskExecutionRole",
             "inline_policy": [],
-            "managed_policy_arns": [
-              "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-            ],
+            "managed_policy_arns": [],
             "max_session_duration": 3600,
             "name": "ecsTaskExecutionRole",
             "name_prefix": "",
             "path": "/",
             "permissions_boundary": "",
-            "tags": {},
+            "tags": null,
             "tags_all": {},
             "unique_id": "AROAYAUUJ3YPAIS5O3AQ3"
           },
@@ -426,7 +458,7 @@
               "subnet-0d142c5f3e6e458ff",
               "subnet-0d33dba4de36a54bf"
             ],
-            "tags": {},
+            "tags": null,
             "tags_all": {},
             "timeouts": null,
             "vpc_id": "vpc-0ed07b234aa1a2191",
@@ -494,7 +526,7 @@
             "routing_http_response_x_content_type_options_header_value": "",
             "routing_http_response_x_frame_options_header_value": "",
             "ssl_policy": "",
-            "tags": {},
+            "tags": null,
             "tags_all": {},
             "tcp_idle_timeout_seconds": null,
             "timeouts": null
@@ -542,9 +574,7 @@
             "id": "arn:aws:elasticloadbalancing:us-east-1:551140580894:targetgroup/medusa-tg/3abd4ff04910756c",
             "ip_address_type": "ipv4",
             "lambda_multi_value_headers_enabled": false,
-            "load_balancer_arns": [
-              "arn:aws:elasticloadbalancing:us-east-1:551140580894:loadbalancer/app/medusa-alb/d623036e1fd4d32d"
-            ],
+            "load_balancer_arns": [],
             "load_balancing_algorithm_type": "round_robin",
             "load_balancing_anomaly_mitigation": "off",
             "load_balancing_cross_zone_enabled": "use_load_balancer_configuration",
@@ -564,7 +594,7 @@
                 "type": "lb_cookie"
               }
             ],
-            "tags": {},
+            "tags": null,
             "tags_all": {},
             "target_failover": [
               {
@@ -882,7 +912,7 @@
             "name_prefix": "",
             "owner_id": "551140580894",
             "revoke_rules_on_delete": false,
-            "tags": {},
+            "tags": null,
             "tags_all": {},
             "timeouts": null,
             "vpc_id": "vpc-0ed07b234aa1a2191"
@@ -942,7 +972,7 @@
             "name_prefix": "",
             "owner_id": "551140580894",
             "revoke_rules_on_delete": false,
-            "tags": {},
+            "tags": null,
             "tags_all": {},
             "timeouts": null,
             "vpc_id": "vpc-0ed07b234aa1a2191"
