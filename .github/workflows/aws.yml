@@ -29,7 +29,7 @@ jobs:
 
       - name: Build and Push Docker image to ECR
         run: |
-          IMAGE_URI=551140580894.dkr.ecr.us-east-1.amazonaws.com/my-repo:latest
+          IMAGE_URI=551140580894.dkr.ecr.us-east-1.amazonaws.com/my_repo:latest
           echo "🔨 Building Docker image..."
           docker build -t $IMAGE_URI .
           echo "📤 Pushing image to ECR..."
@@ -39,7 +39,7 @@ jobs:
       - name: Update ECS task definition
         id: update-task-def
         run: |
-          IMAGE="551140580894.dkr.ecr.us-east-1.amazonaws.com/my-repo:latest"
+          IMAGE="551140580894.dkr.ecr.us-east-1.amazonaws.com/my_repo:latest"
           echo "📋 Fetching current task definition..."
           
           TASK_DEF=$(aws ecs describe-task-definition \
