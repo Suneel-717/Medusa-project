@@ -28,14 +28,14 @@ jobs:
 
       - name: Build and Push Docker image to ECR
         run: |
-          IMAGE_URI=551140580894.dkr.ecr.us-east-1.amazonaws.com/my-repo:latest
+          IMAGE_URI=551140580894.dkr.ecr.us-east-1.amazonaws.com/my_repo:latest
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
 
       - name: Update ECS task definition
         id: update-task-def
         run: |
-          IMAGE="551140580894.dkr.ecr.us-east-1.amazonaws.com/my-repo:latest"
+          IMAGE="551140580894.dkr.ecr.us-east-1.amazonaws.com/my_repo:latest"
 
           TASK_DEF=$(aws ecs describe-task-definition \
             --task-definition medusa-task \
